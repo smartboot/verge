@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/ibuilding-x/driver-box/driverbox/helper"
 	"go.uber.org/zap"
@@ -96,49 +95,14 @@ func (sm *SSEManager) listen() {
 					}
 				}
 			} else {
-				// Connection closed or error - trigger reconnection
-				helper.Logger.Warn("SSE connection closed, attempting reconnection")
+				// Connection closed - token invalid, trigger re-login
+				helper.Logger.Warn("SSE connection closed, assuming token invalid, calling onTokenInvalid")
 				sm.sseResp.Body.Close()
-				time.Sleep(3 * time.Second)
-				go sm.reconnect()
+				if sm.onTokenInvalid != nil {
+					go sm.onTokenInvalid()
+				}
 				return
 			}
 		}
-	}
-}
-
-// reconnect attempts to reconnect using exponential backoff
-func (sm *SSEManager) reconnect() {
-	maxWaitTime := 60 * time.Second
-	maxRetryCount := 5
-	retryCount := 0
-
-	for {
-		err := sm.Connect()
-		if err == nil {
-			helper.Logger.Info("SSE reconnection successful")
-			return
-		}
-
-		retryCount++
-		helper.Logger.Error("SSE reconnection attempt failed", zap.Int("attempt", retryCount), zap.Error(err))
-
-		// If max retries reached, assume token is invalid
-		if retryCount >= maxRetryCount {
-			if sm.onTokenInvalid != nil {
-				helper.Logger.Warn("Max reconnection attempts reached, assuming token invalid, calling onTokenInvalid")
-				sm.onTokenInvalid()
-				return
-			}
-		}
-
-		// Exponential backoff: 1s, 2s, 4s, 8s... max 60s
-		waitTime := time.Duration(1<<uint(retryCount-1)) * time.Second
-		if waitTime > maxWaitTime {
-			waitTime = maxWaitTime
-		}
-
-		helper.Logger.Info("Waiting before next reconnection attempt", zap.Duration("waitTime", waitTime))
-		time.Sleep(waitTime)
 	}
 }
