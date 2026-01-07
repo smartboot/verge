@@ -13,20 +13,22 @@ import (
 
 // SSEManager handles Server-Sent Events connection and reconnection
 type SSEManager struct {
-	baseURL string
-	token   string
-	stopCh  chan struct{}
-	sseResp *http.Response
-	onData  func(data string) error // callback for handling received data
+	baseURL        string
+	token          string
+	stopCh         chan struct{}
+	sseResp        *http.Response
+	onData         func(data string) error // callback for handling received data
+	onTokenInvalid func()                  // callback when token is invalid
 }
 
 // NewSSEManager creates a new SSEManager instance
-func NewSSEManager(baseURL, token string, onData func(data string) error) *SSEManager {
+func NewSSEManager(baseURL, token string, onData func(data string) error, onTokenInvalid func()) *SSEManager {
 	return &SSEManager{
-		baseURL: baseURL,
-		token:   token,
-		onData:  onData,
-		stopCh:  make(chan struct{}),
+		baseURL:        baseURL,
+		token:          token,
+		onData:         onData,
+		onTokenInvalid: onTokenInvalid,
+		stopCh:         make(chan struct{}),
 	}
 }
 
@@ -108,6 +110,7 @@ func (sm *SSEManager) listen() {
 // reconnect attempts to reconnect using exponential backoff
 func (sm *SSEManager) reconnect() {
 	maxWaitTime := 60 * time.Second
+	maxRetryCount := 5
 	retryCount := 0
 
 	for {
@@ -119,6 +122,15 @@ func (sm *SSEManager) reconnect() {
 
 		retryCount++
 		helper.Logger.Error("SSE reconnection attempt failed", zap.Int("attempt", retryCount), zap.Error(err))
+
+		// If max retries reached, assume token is invalid
+		if retryCount >= maxRetryCount {
+			if sm.onTokenInvalid != nil {
+				helper.Logger.Warn("Max reconnection attempts reached, assuming token invalid, calling onTokenInvalid")
+				sm.onTokenInvalid()
+				return
+			}
+		}
 
 		// Exponential backoff: 1s, 2s, 4s, 8s... max 60s
 		waitTime := time.Duration(1<<uint(retryCount-1)) * time.Second

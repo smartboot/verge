@@ -7,4 +7,5 @@ var Handlers = map[string]func(Context, interface{}) error{
 	"device.control":     HandleDeviceControl,
 	"device.add":         HandleDeviceAdd,
 	"product.import":     HandleProductImport,
+	"products.report":    HandleProductsReport,
 }

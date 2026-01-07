@@ -166,11 +166,15 @@ func (export *Export) login() error {
 	export.reporter = reporter.NewReporter(export.baseURL, export.token)
 
 	// Create and connect SSE manager
-	export.sseManager = sse.NewSSEManager(export.baseURL, export.token, export.handleJSONRPC)
+	export.sseManager = sse.NewSSEManager(export.baseURL, export.token, export.handleJSONRPC, func() {
+		go func() {
+			if err := export.login(); err != nil {
+				helper.Logger.Error("Failed to re-login after token invalid", zap.Error(err))
+			}
+		}()
+	})
 	return export.sseManager.Connect()
 }
-
-
 
 // ReportDevices sends device data to the server
 func (export *Export) ReportDevices(deviceIds []string) error {
@@ -180,8 +184,6 @@ func (export *Export) ReportDevices(deviceIds []string) error {
 func (export *Export) ReportShadows(deviceIds []string) error {
 	return export.reporter.ReportShadows(deviceIds)
 }
-
-
 
 // CollectAndReportProducts collects product information from library and reports to server
 func (export *Export) CollectAndReportProducts() error {
