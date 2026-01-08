@@ -1,8 +1,8 @@
 package reporter
 
 import (
-	"github.com/ibuilding-x/driver-box/driverbox/helper"
-	"github.com/ibuilding-x/driver-box/driverbox/pkg/shadow"
+	"github.com/ibuilding-x/driver-box/pkg/driverbox/helper"
+	"github.com/ibuilding-x/driver-box/pkg/driverbox/pkg/shadow"
 	"go.uber.org/zap"
 )
 

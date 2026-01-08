@@ -1,11 +1,9 @@
 package rpc
 
 import (
-	"github.com/ibuilding-x/driver-box/driverbox/helper"
+	"github.com/ibuilding-x/driver-box/pkg/driverbox/helper"
 	"go.uber.org/zap"
 )
-
-
 
 func HandleNetworkStatus(ctx Context, params interface{}) error {
 	helper.Logger.Info("Handling network status", zap.Any("params", params))

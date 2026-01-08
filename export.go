@@ -9,10 +9,10 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/ibuilding-x/driver-box/driverbox"
-	"github.com/ibuilding-x/driver-box/driverbox/event"
-	"github.com/ibuilding-x/driver-box/driverbox/helper"
-	"github.com/ibuilding-x/driver-box/driverbox/plugin"
+	"github.com/ibuilding-x/driver-box/pkg/driverbox"
+	"github.com/ibuilding-x/driver-box/pkg/driverbox/event"
+	"github.com/ibuilding-x/driver-box/pkg/driverbox/helper"
+	"github.com/ibuilding-x/driver-box/pkg/driverbox/plugin"
 	"go.uber.org/zap"
 
 	"github.com/smartboot/verge-export/pkg/reporter"

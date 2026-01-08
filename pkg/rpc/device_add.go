@@ -1,8 +1,8 @@
 package rpc
 
 import (
-	"github.com/ibuilding-x/driver-box/driverbox/config"
-	"github.com/ibuilding-x/driver-box/driverbox/helper"
+	"github.com/ibuilding-x/driver-box/pkg/driverbox/config"
+	"github.com/ibuilding-x/driver-box/pkg/driverbox/helper"
 	"go.uber.org/zap"
 )
 
@@ -11,10 +11,11 @@ func HandleDeviceAdd(ctx Context, params interface{}) error {
 
 	// Define structure for device add parameters
 	type DeviceAddParams struct {
-		ID         string             `json:"id"`
-		Plugin     string             `json:"plugin"`
-		Model      config.DeviceModel `json:"model"`
-		Connection any                `json:"connection"`
+		Plugin        string             `json:"plugin"`
+		Model         config.DeviceModel `json:"model"`
+		ConnectionKey string             `json:"connectionKey"`
+		Connection    any                `json:"connection"`
+		Devices       []config.Device    `json:"devices"`
 	}
 
 	var addParams DeviceAddParams
@@ -28,12 +29,25 @@ func HandleDeviceAdd(ctx Context, params interface{}) error {
 		return err
 	}
 
-	// Report the added device
-	if err := ctx.ReportDevices([]string{addParams.ID}); err != nil {
-		helper.Logger.Error("Failed to report added device", zap.String("deviceId", addParams.ID), zap.Error(err))
+	err = helper.CoreCache.AddConnection(addParams.Plugin, addParams.ConnectionKey, addParams.Connection)
+	if err != nil {
 		return err
 	}
 
-	helper.Logger.Info("Device added successfully", zap.String("deviceId", addParams.ID))
+	for _, device := range addParams.Devices {
+		err = helper.CoreCache.AddOrUpdateDevice(device)
+		if err != nil {
+			helper.Logger.Error("Failed to add or update device", zap.String("deviceId", device.ID), zap.Error(err))
+		}
+	}
+
+	//driverbox.ReloadPlugins()
+	//// Report the added device
+	//if err := ctx.ReportDevices([]string{addParams.ID}); err != nil {
+	//	helper.Logger.Error("Failed to report added device", zap.String("deviceId", addParams.ID), zap.Error(err))
+	//	return err
+	//}
+
+	//helper.Logger.Info("Device added successfully", zap.String("deviceId", addParams.ID))
 	return nil
 }
