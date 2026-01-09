@@ -8,8 +8,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ibuilding-x/driver-box/driverbox/config"
 	"github.com/ibuilding-x/driver-box/driverbox/helper"
+	"github.com/ibuilding-x/driver-box/driverbox/pkg/config"
 	"go.uber.org/zap"
 )
 

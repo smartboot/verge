@@ -3,7 +3,7 @@ module github.com/smartboot/verge-export
 go 1.23.0
 
 require (
-	github.com/ibuilding-x/driver-box v1.5.6-0.20260108120008-935a4020e24c
+	github.com/ibuilding-x/driver-box v1.5.6-0.20260109054241-99777f0b8aa0
 	go.uber.org/zap v1.27.0
 )
 
