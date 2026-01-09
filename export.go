@@ -40,6 +40,9 @@ type Export struct {
 func (export *Export) Init() error {
 	export.ready = true
 	helper.Crontab.AddFunc("10s", func() {
+		if export.reporter == nil {
+			return
+		}
 		deviceIds := make([]string, 0)
 		for _, device := range helper.CoreCache.Devices() {
 			deviceIds = append(deviceIds, device.ID)
