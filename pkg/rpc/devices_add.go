@@ -1,6 +1,12 @@
 package rpc
 
 import (
+	"crypto/md5"
+	"encoding/hex"
+	"fmt"
+	"os"
+	"path/filepath"
+
 	"github.com/ibuilding-x/driver-box/driverbox/helper"
 	"github.com/ibuilding-x/driver-box/driverbox/library"
 	"github.com/ibuilding-x/driver-box/driverbox/pkg/config"
@@ -13,7 +19,8 @@ func HandleDeviceAdd(ctx Context, params interface{}) error {
 	// Define structure for device add parameters
 	type DeviceAddParams struct {
 		Plugin        string          `json:"plugin"`
-		ModelKey      string          `json:"model"`
+		ModelKey      string          `json:"modelKey"`
+		ModelHash     string          `json:"modelHash"`
 		ConnectionKey string          `json:"connectionKey"`
 		Connection    any             `json:"connection"`
 		Devices       []config.Device `json:"devices"`
@@ -24,7 +31,40 @@ func HandleDeviceAdd(ctx Context, params interface{}) error {
 	if err != nil {
 		return err
 	}
-	model, _ := library.Model().LoadLibrary(addParams.ModelKey)
+
+	// Get resource path
+	resPath := os.Getenv(config.ENV_RESOURCE_PATH)
+	if resPath == "" {
+		resPath = "./res"
+	}
+
+	// Build model file path
+	modelPath := filepath.Join(resPath, "library", "model", addParams.ModelKey+".json")
+
+	// Read model file
+	modelContent, err := os.ReadFile(modelPath)
+	if err != nil {
+		helper.Logger.Error("Failed to read model file", zap.String("modelKey", addParams.ModelKey), zap.String("path", modelPath), zap.Error(err))
+		return fmt.Errorf("failed to read model file: %v", err)
+	}
+
+	// Calculate MD5 hash
+	hash := md5.Sum(modelContent)
+	computedHash := hex.EncodeToString(hash[:])
+
+	// Verify model hash
+	if computedHash != addParams.ModelHash {
+		helper.Logger.Error("Model hash mismatch", zap.String("modelKey", addParams.ModelKey), zap.String("expected", addParams.ModelHash), zap.String("computed", computedHash))
+		return fmt.Errorf("model hash mismatch for %s", addParams.ModelKey)
+	}
+
+	// Load model from library
+	model, err := library.Model().LoadLibrary(addParams.ModelKey)
+	if err != nil {
+		helper.Logger.Error("Failed to load model from library", zap.String("modelKey", addParams.ModelKey), zap.Error(err))
+		return fmt.Errorf("failed to load model: %v", err)
+	}
+	model.Name = addParams.ModelKey + "_" + computedHash
 	err = helper.CoreCache.AddModel(addParams.Plugin, model)
 	if err != nil {
 		return err
