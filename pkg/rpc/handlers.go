@@ -5,7 +5,7 @@ var Handlers = map[string]func(Context, interface{}) error{
 	"node.configChanged": HandleConfigChanged,
 	"node.command":       HandleCommand,
 	"device.control":     HandleDeviceControl,
-	"device.add":         HandleDeviceAdd,
+	"devices.add":        HandleDeviceAdd,
 	"product.import":     HandleProductImport,
 	"products.report":    HandleProductsReport,
 }

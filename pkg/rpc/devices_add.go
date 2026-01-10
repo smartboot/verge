@@ -2,6 +2,7 @@ package rpc
 
 import (
 	"github.com/ibuilding-x/driver-box/driverbox/helper"
+	"github.com/ibuilding-x/driver-box/driverbox/library"
 	"github.com/ibuilding-x/driver-box/driverbox/pkg/config"
 	"go.uber.org/zap"
 )
@@ -11,11 +12,11 @@ func HandleDeviceAdd(ctx Context, params interface{}) error {
 
 	// Define structure for device add parameters
 	type DeviceAddParams struct {
-		Plugin        string             `json:"plugin"`
-		Model         config.DeviceModel `json:"model"`
-		ConnectionKey string             `json:"connectionKey"`
-		Connection    any                `json:"connection"`
-		Devices       []config.Device    `json:"devices"`
+		Plugin        string          `json:"plugin"`
+		ModelKey      string          `json:"model"`
+		ConnectionKey string          `json:"connectionKey"`
+		Connection    any             `json:"connection"`
+		Devices       []config.Device `json:"devices"`
 	}
 
 	var addParams DeviceAddParams
@@ -23,8 +24,8 @@ func HandleDeviceAdd(ctx Context, params interface{}) error {
 	if err != nil {
 		return err
 	}
-
-	err = helper.CoreCache.AddModel(addParams.Plugin, addParams.Model)
+	model, _ := library.Model().LoadLibrary(addParams.ModelKey)
+	err = helper.CoreCache.AddModel(addParams.Plugin, model)
 	if err != nil {
 		return err
 	}
