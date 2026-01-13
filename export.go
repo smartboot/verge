@@ -132,10 +132,9 @@ func (export *Export) login() error {
 		return errors.New("VERGE_BASE_URL environment variable not set")
 	}
 	export.baseURL = strings.TrimSuffix(baseURL, "/")
-	loginURL := export.baseURL + "/api/nodes/login"
 
 	sn := driverbox.GetMetadata().SerialNo
-
+	loginURL := export.baseURL + "/api/node/" + sn + "/login"
 	// Prepare login payload
 	loginData := map[string]string{"sn": sn}
 	loginPayloadBytes, err := json.Marshal(loginData)
