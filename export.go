@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/ibuilding-x/driver-box/driverbox"
 	"github.com/ibuilding-x/driver-box/driverbox/helper"
@@ -103,7 +104,15 @@ func (export *Export) ExportTo(deviceData plugin.DeviceData) {
 func (export *Export) OnEvent(eventCode string, key string, eventValue interface{}) error {
 	//网关启动完成
 	if eventCode == event.EventCodeServiceStatus {
-		export.login()
+		for {
+			err := export.login()
+			if err == nil {
+				break
+			}
+			helper.Logger.Error("Failed to login", zap.Error(err))
+			time.Sleep(5 * time.Second)
+		}
+
 	}
 	return nil
 }
@@ -171,9 +180,14 @@ func (export *Export) login() error {
 	// Create and connect SSE manager
 	export.sseManager = sse.NewSSEManager(export.baseURL, export.token, export.handleJSONRPC, func() {
 		go func() {
-			if err := export.login(); err != nil {
+			for {
+				if err := export.login(); err == nil {
+					return
+				}
 				helper.Logger.Error("Failed to re-login after token invalid", zap.Error(err))
+				time.Sleep(5 * time.Second)
 			}
+
 		}()
 	})
 	return export.sseManager.Connect()
