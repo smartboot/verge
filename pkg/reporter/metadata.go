@@ -10,6 +10,8 @@ import (
 	"github.com/smartboot/verge/pkg"
 	"go.uber.org/zap"
 
+	"github.com/shirou/gopsutil/v3/cpu"
+	"github.com/shirou/gopsutil/v3/load"
 	"github.com/shirou/gopsutil/v3/mem"
 )
 
@@ -28,6 +30,12 @@ type Metadata struct {
 	SystemMemory    uint64 `json:"systemMemory"` // 系统内存(byte)
 	AvailMemory     uint64 `json:"availMemory"`  // 剩余内存(byte)
 	AppMemory       uint64 `json:"appMemory"`    // 应用内存(byte)
+	// CPU负载信息
+	CPUPercent float64 `json:"cpuPercent"` // CPU使用率(%)
+	Load1      float64 `json:"load1"`      // 1分钟负载平均值
+	Load5      float64 `json:"load5"`      // 5分钟负载平均值
+	Load15     float64 `json:"load15"`     // 15分钟负载平均值
+	NumCPU     int     `json:"numCPU"`     // CPU核心数
 }
 
 // ReportMetadata 上报节点元数据信息到服务器
@@ -41,6 +49,23 @@ func (r *Reporter) ReportMetadata() error {
 		driverbox.Log().Error("Failed to get system memory info", zap.Error(err))
 		return err
 	}
+
+	// 获取基本CPU信息
+	cpuCount := runtime.NumCPU()
+
+	// 获取准确的CPU使用率
+	cpuPercents, err := cpu.Percent(0, false)
+	if err != nil {
+		driverbox.Log().Warn("Failed to get CPU percent", zap.Error(err))
+		cpuPercents = []float64{0}
+	}
+
+	// 获取准确的系统负载信息
+	loadAvg, err := load.Avg()
+	if err != nil {
+		driverbox.Log().Warn("Failed to get load average", zap.Error(err))
+	}
+
 	// 获取当前进程内存信息
 	psStat := &runtime.MemStats{}
 	runtime.ReadMemStats(psStat)
@@ -57,6 +82,12 @@ func (r *Reporter) ReportMetadata() error {
 		SystemMemory: vmStat.Total,                              // 系统内存(byte)
 		AvailMemory:  vmStat.Available,
 		AppMemory:    psStat.HeapSys, // 应用内存(byte)
+		// CPU和负载信息
+		CPUPercent: cpuPercents[0], // 准确的CPU使用率(%)
+		Load1:      loadAvg.Load1,  // 准确的1分钟负载平均值
+		Load5:      loadAvg.Load5,  // 准确的5分钟负载平均值
+		Load15:     loadAvg.Load15, // 准确的15分钟负载平均值
+		NumCPU:     cpuCount,       // CPU核心数
 	}
 
 	// 使用现有的postReport方法上报metadata
