@@ -67,6 +67,8 @@ func HandleDeviceAdd(ctx Context, params interface{}) error {
 		}
 
 		for _, device := range addParams.Devices {
+			device.ModelName = model.Name
+			device.ConnectionKey = addParams.ConnectionKey
 			err = driverbox.CoreCache().AddOrUpdateDevice(device)
 			if err != nil {
 				driverbox.Log().Error("Failed to add or update device", zap.String("deviceId", device.ID), zap.Error(err))
