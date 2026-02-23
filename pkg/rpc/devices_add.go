@@ -20,6 +20,7 @@ func HandleDeviceAdd(ctx Context, params interface{}) error {
 	// Define structure for device add parameters
 	type DeviceAddParams struct {
 		Plugin        string          `json:"plugin"`
+		ProductId     string          `json:"productId"`
 		ModelKey      string          `json:"modelKey"`
 		ModelHash     string          `json:"modelHash"`
 		ConnectionKey string          `json:"connectionKey"`
@@ -61,6 +62,10 @@ func HandleDeviceAdd(ctx Context, params interface{}) error {
 			return fmt.Errorf("failed to load model: %v", err)
 		}
 		model.Name = addParams.ModelKey + "_" + computedHash
+		//绑定产品ID
+		modelAttr := model.Attributes
+		modelAttr["productId"] = addParams.ProductId
+		model.Attributes = modelAttr
 		err = driverbox.CoreCache().AddModel(addParams.Plugin, model)
 		if err != nil {
 			return err
