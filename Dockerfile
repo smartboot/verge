@@ -8,17 +8,14 @@ ARG BUILD_TIME
 # 设置工作目录
 WORKDIR /build
 
-# 复制 go.mod 和 go.sum 文件
-COPY go.mod go.sum ./
-
-# 下载依赖
-RUN go mod download
 
 # 复制源代码
 COPY . .
+RUN go mod tidy
+RUN go mod vendor
 
 # 构建应用
-RUN GOOS=linux GOARCH=amd64 go build \
+RUN go build \
     -ldflags "-s -w -X 'pkg.Version=${VERSION}' -X 'pkg.BuildTime=${BUILD_TIME}'" \
     -o /build/verge cmd/main.go
 
@@ -26,7 +23,7 @@ RUN GOOS=linux GOARCH=amd64 go build \
 FROM alpine:3.19
 
 # 安装必要的运行时依赖
-RUN apk add --no-cache ca-certificates tzdata
+#RUN apk add --no-cache ca-certificates tzdata
 
 # 创建非 root 用户
 RUN addgroup -g 1000 verge && \
@@ -39,7 +36,7 @@ WORKDIR /app
 COPY --from=builder /build/verge /app/verge
 
 # 复制资源文件
-COPY --from=builder /build/res /app/res
+#COPY --from=builder /build/res /app/res
 COPY --from=builder /build/platform/linux/start.sh /app/start.sh
 
 # 设置权限
