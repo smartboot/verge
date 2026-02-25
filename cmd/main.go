@@ -2,8 +2,6 @@
 package main
 
 import (
-	"os"
-
 	"github.com/ibuilding-x/driver-box/v2/driverbox"
 	"github.com/ibuilding-x/driver-box/v2/exports"
 	"github.com/ibuilding-x/driver-box/v2/plugins"
@@ -12,7 +10,7 @@ import (
 
 func main() {
 	// 设置verge服务器基础URL环境变量
-	os.Setenv(verge.ENV_VERGE_BASE_URL, "http://localhost:8080")
+	//os.Setenv(verge.ENV_VERGE_BASE_URL, "http://localhost:8080")
 
 	// 注册所有插件
 	plugins.EnableAll()
