@@ -19,7 +19,7 @@ RUN BUILD_TIME=$(date +%Y%m%d%H%M%S) && \
     -o /build/verge cmd/main.go
 
 # Runtime stage
-FROM alpine:3.19
+FROM alpine:3.23
 
 # 安装必要的运行时依赖
 #RUN apk add --no-cache ca-certificates tzdata
