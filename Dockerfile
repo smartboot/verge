@@ -37,7 +37,7 @@ COPY --from=builder /build/verge /app/verge
 
 # 复制资源文件
 #COPY --from=builder /build/res /app/res
-COPY --from=builder /build/platform/linux/start.sh /app/start.sh
+#COPY --from=builder /build/platform/linux/start.sh /app/start.sh
 
 # 设置权限
 RUN chmod +x /app/verge /app/start.sh && \
@@ -50,4 +50,4 @@ USER verge
 # EXPOSE 8080
 
 # 设置启动命令
-CMD ["./start.sh"]
+CMD ["/app/verge"]
