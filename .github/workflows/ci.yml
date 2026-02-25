@@ -19,7 +19,6 @@ jobs:
         go-version: '1.23'
 
     - name: Run deploy.sh
-
       run: chmod +x deploy.sh && ./deploy.sh ${GITHUB_REF#refs/heads/}
 
     - uses: actions/upload-artifact@v4
