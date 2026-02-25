@@ -3,11 +3,9 @@ FROM golang:1.23-alpine AS builder
 
 # 设置构建参数
 ARG VERSION=dev
-ARG BUILD_TIME
 
 # 设置工作目录
 WORKDIR /build
-
 
 # 复制源代码
 COPY . .
@@ -15,7 +13,8 @@ RUN go mod tidy
 RUN go mod vendor
 
 # 构建应用
-RUN go build \
+RUN BUILD_TIME=$(date +%Y%m%d%H%M%S) && \
+    go build \
     -ldflags "-s -w -X 'pkg.Version=${VERSION}' -X 'pkg.BuildTime=${BUILD_TIME}'" \
     -o /build/verge cmd/main.go
 
