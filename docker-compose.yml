@@ -1,0 +1,42 @@
+networks:
+  verge-network:
+    driver: bridge
+services:
+  verge:
+    container_name: verge
+    hostname: verge
+    image: smartboot/verge:latest
+    networks:
+      verge-network: null
+    restart: always
+    privileged: true
+    security_opt:
+      - no-new-privileges:true
+    user: root:root
+    environment:
+      ENV_VERGE_BASE_URL: http://verge-ui:8080
+#    ports:
+#      - 18080:8080
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
+  verge-ui:
+    container_name: verge-ui
+    hostname: verge-ui
+    image: smartboot/verge-ui:latest-alpine
+    networks:
+      verge-network: null
+    restart: always
+    privileged: true
+    security_opt:
+      - no-new-privileges:true
+    user: root:root
+    ports:
+      - 18080:8080
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
