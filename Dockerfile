@@ -40,8 +40,7 @@ COPY --from=builder /build/verge /app/verge
 #COPY --from=builder /build/platform/linux/start.sh /app/start.sh
 
 # 设置权限
-RUN chmod +x /app/verge /app/start.sh && \
-    chown -R verge:verge /app
+RUN chown -R verge:verge /app
 
 # 切换到非 root 用户
 USER verge
