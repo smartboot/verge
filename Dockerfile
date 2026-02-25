@@ -32,14 +32,11 @@ RUN addgroup -g 1000 verge && \
 WORKDIR /app
 
 # 从构建阶段复制二进制文件
-COPY --from=builder /build/verge /app/verge
+COPY --from=builder --chown=verge:verge /build/verge /app/verge
 
 # 复制资源文件
 #COPY --from=builder /build/res /app/res
 #COPY --from=builder /build/platform/linux/start.sh /app/start.sh
-
-# 设置权限
-RUN chown -R verge:verge /app
 
 # 切换到非 root 用户
 USER verge
