@@ -10,7 +10,11 @@
 [![Docker](https://github.com/smartboot/verge/actions/workflows/docker.yml/badge.svg?branch=master)](https://github.com/smartboot/verge/actions/workflows/docker.yml)
 [![Go Version](https://img.shields.io/badge/Go-1.23+-00ADD8?logo=go&style=flat)](https://go.dev)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/smartboot/verge?logo=github&style=flat)](https://github.com/smartboot/verge/releases)
+[![Gitee](https://img.shields.io/badge/Gitee-red?logo=gitee&style=flat)](https://gitee.com/smartboot/verge)
+
+[🇺🇸 English](README_en.md) | [🇨🇳 简体中文](README.md)
+
+> 📌 **国内用户**：访问 [Gitee 仓库](https://gitee.com/smartboot/verge) 获取更快下载速度
 
 ---
 
@@ -30,7 +34,7 @@
 
 ### 方式一：二进制部署（生产环境推荐）
 
-从 [Releases](https://github.com/smartboot/verge/releases) 下载对应平台的压缩包：
+从 [Gitee Releases](https://gitee.com/smartboot/verge/releases) 或 [GitHub Releases](https://github.com/smartboot/verge/releases) 下载对应平台的压缩包：
 
 ```bash
 # 下载并解压（以 Linux ARM64 为例）
@@ -89,18 +93,6 @@ go run cmd/main.go
 | **云边协同** | ☁️🔗 | SSE 实时通信 + JSON-RPC 标准接口 |
 | **容器化** | 🐳 | 提供 Docker 镜像和 compose 配置 |
 | **热插拔驱动** | ⚡ | 基于 Lua 的驱动脚本，通过 `driverbox` 模块扩展协议 |
-
-### 📊 特性雷达图
-
-```mermaid
-radarChart
-    title Verge 核心能力评分
-    "性能优化" : 95
-    "易用性" : 90
-    "扩展性" : 85
-    "稳定性" : 98
-    "社区支持" : 75
-```
 
 ---
 
@@ -199,19 +191,6 @@ sequenceDiagram
 
 > 💡 **提示**：使用 `export` 命令设置环境变量，或在启动脚本中直接定义。
 
-### 📂 运行时目录
-
-Verge 运行时会创建以下目录结构：
-
-```
-verge_data/
-├── logs/           # 运行日志
-├── config/         # 动态配置文件
-└── cache/          # 缓存数据
-```
-
----
-
 
 ## 🗂️ 项目结构
 
@@ -270,9 +249,13 @@ verge/
 ### 开发环境搭建
 
 ```bash
-# 克隆项目
+# 克隆项目（GitHub）
 git clone https://github.com/smartboot/verge.git
 cd verge
+
+# 或者使用 Gitee（国内用户推荐）
+# git clone https://gitee.com/smartboot/verge.git
+# cd verge
 
 # 安装依赖
 go mod tidy
@@ -310,15 +293,14 @@ go build -o verge ./cmd/main.go
 
 ### 让边缘计算更简单
 
-[![Stars](https://img.shields.io/github/stars/smartboot/verge?style=for-the-badge&logo=github)](https://github.com/smartboot/verge/stargazers)
-[![Forks](https://img.shields.io/github/forks/smartboot/verge?style=for-the-badge&logo=github)](https://github.com/smartboot/verge/network/members)
-[![Issues](https://img.shields.io/github/issues/smartboot/verge?style=for-the-badge&logo=github)](https://github.com/smartboot/verge/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/smartboot/verge?style=for-the-badge&logo=github)](https://github.com/smartboot/verge/stargazers)
+[![Gitee Stars](https://gitee.com/smartboot/verge/badge/star.svg?theme=dark)](https://gitee.com/smartboot/verge/stargazers)
 
-| 资源 | 链接 |
-|:-----|:-----|
-| 📝 [问题反馈](https://github.com/smartboot/verge/issues) | 报告 Bug 或提出需求 |
-| 💬 [功能建议](https://github.com/smartboot/verge/discussions) | 参与社区讨论 |
-| 📦 [Releases](https://github.com/smartboot/verge/releases) | 下载最新版本 |
+| 资源 | GitHub | Gitee |
+|:-----|:-------|:------|
+| 📝 问题反馈 | [Issues](https://github.com/smartboot/verge/issues) | [Issues](https://gitee.com/smartboot/verge/issues) |
+| 💬 功能建议 | [Discussions](https://github.com/smartboot/verge/discussions) | - |
+| 📦 下载 | [Releases](https://github.com/smartboot/verge/releases) | [Releases](https://gitee.com/smartboot/verge/releases) |
 
 <p align="center">
   <sub>Built with ❤️ by the Verge Team</sub>
