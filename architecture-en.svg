@@ -1,13 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520">
   <defs>
+    <!-- Application Layer: Commercial product, muted gray tones -->
     <linearGradient id="appGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#6366f1"/>
-      <stop offset="100%" style="stop-color:#8b5cf6"/>
+      <stop offset="0%" style="stop-color:#64748b"/>
+      <stop offset="100%" style="stop-color:#94a3b8"/>
     </linearGradient>
+    <!-- Edge Layer: Core open-source product, prominent deep blue -->
     <linearGradient id="edgeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#059669"/>
-      <stop offset="100%" style="stop-color:#10b981"/>
+      <stop offset="0%" style="stop-color:#1d4ed8"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
     </linearGradient>
+    <!-- Device Layer: Keep orange -->
     <linearGradient id="deviceGrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" style="stop-color:#ea580c"/>
       <stop offset="100%" style="stop-color:#f97316"/>
@@ -29,24 +32,24 @@
   
   <!-- Application Layer Cards -->
   <rect x="50" y="85" width="120" height="50" rx="6" fill="white" fill-opacity="0.95"/>
-  <text x="110" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#4f46e5" font-weight="500">🔧 Device Mgmt</text>
+  <text x="110" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#475569" font-weight="500">🔧 Device Mgmt</text>
   
   <rect x="190" y="85" width="120" height="50" rx="6" fill="white" fill-opacity="0.95"/>
-  <text x="250" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#4f46e5" font-weight="500">⚡ Scene Linkage</text>
+  <text x="250" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#475569" font-weight="500">⚡ Scene Linkage</text>
   
   <rect x="330" y="85" width="120" height="50" rx="6" fill="white" fill-opacity="0.95"/>
-  <text x="390" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#4f46e5" font-weight="500">📐 Rule Engine</text>
+  <text x="390" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#475569" font-weight="500">📐 Rule Engine</text>
   
   <rect x="470" y="85" width="120" height="50" rx="6" fill="white" fill-opacity="0.95"/>
-  <text x="530" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#4f46e5" font-weight="500">🖥️ User Interface</text>
+  <text x="530" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#475569" font-weight="500">🖥️ User Interface</text>
   
   <rect x="610" y="85" width="140" height="50" rx="6" fill="white" fill-opacity="0.95"/>
-  <text x="680" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#4f46e5" font-weight="500">📊 Analytics</text>
+  <text x="680" y="115" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#475569" font-weight="500">📊 Analytics</text>
   
   <!-- Connection Line 1 -->
   <line x1="400" y1="170" x2="400" y2="195" stroke="#64748b" stroke-width="2" stroke-dasharray="4,2"/>
-  <rect x="300" y="178" width="200" height="20" rx="10" fill="#e0e7ff"/>
-  <text x="400" y="192" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#4f46e5">SSE + JSON-RPC 2.0</text>
+  <rect x="300" y="178" width="200" height="20" rx="10" fill="#e2e8f0"/>
+  <text x="400" y="192" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#475569">SSE + JSON-RPC 2.0</text>
   
   <!-- ==================== Edge Layer ==================== -->
   <rect x="30" y="205" width="740" height="120" rx="10" fill="url(#edgeGrad)" filter="url(#shadow)"/>
@@ -54,19 +57,19 @@
   
   <!-- Edge Layer Cards -->
   <rect x="50" y="245" width="160" height="50" rx="6" fill="white" fill-opacity="0.95"/>
-  <text x="130" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#059669" font-weight="500">🔌 Device Access</text>
+  <text x="130" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#1d4ed8" font-weight="500">🔌 Device Access</text>
   <text x="130" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#64748b">Modbus/MQTT/HTTP</text>
   
   <rect x="230" y="245" width="160" height="50" rx="6" fill="white" fill-opacity="0.95"/>
-  <text x="310" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#059669" font-weight="500">📡 Data Collection</text>
+  <text x="310" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#1d4ed8" font-weight="500">📡 Data Collection</text>
   <text x="310" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#64748b">Real-time Reading</text>
   
   <rect x="410" y="245" width="160" height="50" rx="6" fill="white" fill-opacity="0.95"/>
-  <text x="490" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#059669" font-weight="500">🔄 Protocol Conv.</text>
+  <text x="490" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#1d4ed8" font-weight="500">🔄 Protocol Conv.</text>
   <text x="490" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#64748b">Lua Script Extension</text>
   
   <rect x="590" y="245" width="160" height="50" rx="6" fill="white" fill-opacity="0.95"/>
-  <text x="670" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#059669" font-weight="500">🌐 Cloud-Edge Comm</text>
+  <text x="670" y="270" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#1d4ed8" font-weight="500">🌐 Cloud-Edge Comm</text>
   <text x="670" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#64748b">Shadow/Heartbeat</text>
   
   <!-- Connection Line 2 -->
