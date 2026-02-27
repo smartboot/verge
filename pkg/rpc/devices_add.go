@@ -86,7 +86,7 @@ func HandleDeviceAdd(ctx Context, params interface{}) error {
 		return err
 	}
 
-	//driverbox.ReloadPlugins()
+	driverbox.ReloadPlugins()
 	//// Report the added device
 	//if err := ctx.ReportDevices([]string{addParams.ID}); err != nil {
 	//	driverbox.Log().Error("Failed to report added device", zap.String("deviceId", addParams.ID), zap.Error(err))
