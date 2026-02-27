@@ -90,12 +90,12 @@
   <text x="400" y="480" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#94a3b8">基于 driver-box 框架构建 · Apache License 2.0</text>
   
   <!-- 特性标签 -->
-  <rect x="30" y="495" width="200" height="18" rx="9" fill="#dcfce7"/>
-  <text x="130" y="508" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#166534">⚡ 极致轻量</text>
+  <rect x="80" y="495" width="200" height="18" rx="9" fill="#dcfce7"/>
+  <text x="180" y="508" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#166534">⚡ 极致轻量</text>
   
-  <rect x="250" y="495" width="200" height="18" rx="9" fill="#dbeafe"/>
-  <text x="350" y="508" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#1e40af">🛡️ 高度稳定</text>
+  <rect x="300" y="495" width="200" height="18" rx="9" fill="#dbeafe"/>
+  <text x="400" y="508" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#1e40af">🛡️ 高度稳定</text>
   
-  <rect x="470" y="495" width="200" height="18" rx="9" fill="#fef3c7"/>
-  <text x="570" y="508" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#92400e">📦 近零更新</text>
+  <rect x="520" y="495" width="200" height="18" rx="9" fill="#fef3c7"/>
+  <text x="620" y="508" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#92400e">📦 近零更新</text>
 </svg>
