@@ -43,6 +43,7 @@ type Export struct {
 func (export *Export) Init() error {
 	driverbox.UpdateMetadata(func(metadata *config.Metadata) {
 		metadata.SoftwareVersion = pkg.Version
+		metadata.Vendor = "verge"
 	})
 	export.ready = true
 
