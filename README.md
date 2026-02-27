@@ -20,37 +20,37 @@ Traditional edge gateways often integrate full-stack functionality including dev
 **Verge adopts an "Application-Edge Separation" architecture**: Complex business logic (scene linkage, rule engines, user interfaces) is placed in the application layer, while the edge gateway only handles core device access and data acquisition. The application layer can be deployed on cloud servers or run as a local desktop application.
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│        Application Layer (Cloud Server / Desktop App)         │
-│                                                              │
-│   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
-│   │ Device   │  │  Scene   │  │  Rule    │  │   User   │   │
-│   │ Management│  │ Linkage  │  │  Engine  │  │Interface │   │
-│   └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
-│                                                              │
-│              ✓ Rapid Iteration  ✓ Rich Experience           │
-└─────────────────────────────┬───────────────────────────────┘
-                              │
-                              │ SSE + JSON-RPC (Standard API)
-                              │
-┌─────────────────────────────▼───────────────────────────────┐
-│                   Edge Layer (Verge Gateway)                 │
-│                                                              │
-│   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
-│   │  Device  │  │   Data   │  │ Protocol │  │ Cloud-Edge│   │
-│   │  Access  │  │Collection│  │Conversion│  │  Comm    │   │
-│   └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
-│                                                              │
-│             ✓ Ultra-Lightweight  ✓ High Stability           │
-└─────────────────────────────┬───────────────────────────────┘
-                              │
-                              │ Modbus / MQTT / HTTP
-                              │
-┌─────────────────────────────▼───────────────────────────────┐
-│                      Physical Devices                        │
-│                                                              │
-│      Meters / HVAC / Lighting / Sensors / PV Inverters ...  │
-└─────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────┐
+│              Application Layer (Cloud Server / Desktop App)       │
+│                                                                   │
+│   ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐ │
+│   │   Device   │  │   Scene    │  │    Rule    │  │    User    │ │
+│   │ Management │  │  Linkage   │  │   Engine   │  │  Interface │ │
+│   └────────────┘  └────────────┘  └────────────┘  └────────────┘ │
+│                                                                   │
+│                 ✓ Rapid Iteration  ✓ Rich Experience              │
+└───────────────────────────────────┬───────────────────────────────┘
+                                    │
+                                    │ SSE + JSON-RPC (Standard API)
+                                    │
+┌───────────────────────────────────▼───────────────────────────────┐
+│                      Edge Layer (Verge Gateway)                   │
+│                                                                   │
+│   ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐ │
+│   │   Device   │  │    Data    │  │  Protocol  │  │ Cloud-Edge │ │
+│   │   Access   │  │ Collection │  │ Conversion │  │    Comm    │ │
+│   └────────────┘  └────────────┘  └────────────┘  └────────────┘ │
+│                                                                   │
+│               ✓ Ultra-Lightweight  ✓ High Stability               │
+└───────────────────────────────────┬───────────────────────────────┘
+                                    │
+                                    │ Modbus / MQTT / HTTP
+                                    │
+┌───────────────────────────────────▼───────────────────────────────┐
+│                         Physical Devices                          │
+│                                                                   │
+│        Meters / HVAC / Lighting / Sensors / PV Inverters ...      │
+└───────────────────────────────────────────────────────────────────┘
 ```
 
 ### Core Advantages
