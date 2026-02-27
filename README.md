@@ -5,159 +5,161 @@
 [![Go Version](https://img.shields.io/badge/Go-1.23+-00ADD8?logo=go)](https://go.dev)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-[🇺🇸 English](README_en.md) | [🇨🇳 简体中文](README.md) 
+[🇺🇸 English](README.md) | [🇨🇳 简体中文](README_zh.md)
 
-> 一个轻量级、标准化的边缘计算网关解决方案 — 专注于设备数据采集与治理，将硬件资源需求降至极致。
+> A lightweight, standardized edge computing gateway solution — Focused on device data acquisition and governance, minimizing hardware resource requirements.
 
-## 设计哲学
+## Design Philosophy
 
-传统边缘网关往往集成了设备接入、场景联动、规则引擎、用户界面等全量功能。这种"大而全"的设计导致：
+Traditional edge gateways often integrate full-stack functionality including device access, scene linkage, rule engines, and user interfaces. This "all-in-one" design leads to:
 
-- 资源占用高，需要高配硬件
-- OTA 频繁，任何功能迭代都可能影响核心稳定性
-- 硬件门槛高，难以部署在低端设备
+- High resource consumption, requiring powerful hardware
+- Frequent OTA updates, where any feature iteration may affect core stability
+- High hardware barriers, difficult to deploy on low-end devices
 
-**Verge 采用「应用与边缘分离」架构**：将复杂的业务逻辑（场景联动、规则引擎、用户界面）放在应用层，边缘网关只负责最核心的设备接入与数据采集。应用层可以部署在云端服务器，也可以作为本地桌面应用运行。
+**Verge adopts an "Application-Edge Separation" architecture**: Complex business logic (scene linkage, rule engines, user interfaces) is placed in the application layer, while the edge gateway only handles core device access and data acquisition. The application layer can be deployed on cloud servers or run as a local desktop application.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│              应用层（云端服务器 / 本地桌面应用）               │
+│        Application Layer (Cloud Server / Desktop App)         │
 │                                                              │
 │   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
-│   │ 设备管理  │  │ 场景联动  │  │ 规则引擎  │  │ 用户界面  │   │
+│   │ Device   │  │  Scene   │  │  Rule    │  │   User   │   │
+│   │ Management│  │ Linkage  │  │  Engine  │  │Interface │   │
 │   └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
 │                                                              │
-│                    ✓ 快速迭代  ✓ 丰富体验                    │
+│              ✓ Rapid Iteration  ✓ Rich Experience           │
 └─────────────────────────────┬───────────────────────────────┘
                               │
-                              │ SSE + JSON-RPC（标准 API）
+                              │ SSE + JSON-RPC (Standard API)
                               │
 ┌─────────────────────────────▼───────────────────────────────┐
-│                      边缘层（Verge 网关）                     │
+│                   Edge Layer (Verge Gateway)                 │
 │                                                              │
 │   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
-│   │ 设备接入  │  │ 数据采集  │  │ 协议转换  │  │ 云边通信  │   │
+│   │  Device  │  │   Data   │  │ Protocol │  │ Cloud-Edge│   │
+│   │  Access  │  │Collection│  │Conversion│  │  Comm    │   │
 │   └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
 │                                                              │
-│                    ✓ 极致轻量  ✓ 高度稳定                    │
+│             ✓ Ultra-Lightweight  ✓ High Stability           │
 └─────────────────────────────┬───────────────────────────────┘
                               │
                               │ Modbus / MQTT / HTTP
                               │
 ┌─────────────────────────────▼───────────────────────────────┐
-│                         物理设备                              │
+│                      Physical Devices                        │
 │                                                              │
-│         电表 / 空调 / 照明 / 传感器 / 光伏逆变器 / ...        │
+│      Meters / HVAC / Lighting / Sensors / PV Inverters ...  │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 核心优势
+### Core Advantages
 
-| 维度 | 传统网关 | Verge 网关 |
-|------|----------|------------|
-| 资源占用 | 高 | 极致低 |
-| OTA 频率 | 高 | 几乎为零 |
-| 硬件要求 | 中高配置 | 任意硬件 |
-| 稳定性 | 受应用迭代影响 | 长期稳定 |
+| Dimension | Traditional Gateway | Verge Gateway |
+|-----------|---------------------|---------------|
+| Resource Usage | High | Ultra-Low |
+| OTA Frequency | High | Near Zero |
+| Hardware Requirements | Mid-High | Any Hardware |
+| Stability | Affected by App Iteration | Long-term Stable |
 
-## 技术实现
+## Technical Implementation
 
-Verge 基于 [driver-box](https://github.com/ibuilding-x/driver-box) 框架构建，复用其成熟的设备接入能力。
+Verge is built on the [driver-box](https://github.com/ibuilding-x/driver-box) framework, leveraging its mature device access capabilities.
 
-### 云边通信
+### Cloud-Edge Communication
 
-- **SSE（Server-Sent Events）** - 保持与云端的长连接，实时接收指令
-- **JSON-RPC 2.0** - 标准化的远程调用协议
+- **SSE (Server-Sent Events)** - Maintains long-polling connection with cloud for real-time command reception
+- **JSON-RPC 2.0** - Standardized remote procedure call protocol
 
-### 通信流程
+### Communication Flow
 
 ```
 ┌─────────┐                                          ┌─────────┐
-│  Verge  │                                          │  云端   │
+│  Verge  │                                          │  Cloud  │
 └────┬────┘                                          └────┬────┘
      │                                                    │
-     │  1. 登录（使用序列号认证）                          │
+     │  1. Login (Authenticate with Serial Number)        │
      │ ──────────────────────────────────────────────►    │
      │                                                    │
-     │  2. 返回 Token                                     │
+     │  2. Return Token                                   │
      │ ◄──────────────────────────────────────────────    │
      │                                                    │
-     │  3. 建立 SSE 长连接                                │
+     │  3. Establish SSE Connection                       │
      │ ──────────────────────────────────────────────►    │
      │                                                    │
-     │  4. 定时上报设备影子、节点元数据                    │
+     │  4. Periodically Report Device Shadow & Metadata   │
      │ ──────────────────────────────────────────────►    │
      │                                                    │
-     │  5. 下发控制指令（JSON-RPC）                        │
+     │  5. Send Control Commands (JSON-RPC)               │
      │ ◄──────────────────────────────────────────────    │
      │                                                    │
-     │  6. 执行设备操作，返回结果                          │
+     │  6. Execute Device Operations, Return Results      │
      │ ──────────────────────────────────────────────►    │
      │                                                    │
 ```
 
-### 支持的 JSON-RPC 方法
+### Supported JSON-RPC Methods
 
-| 方法 | 说明 |
-|------|------|
-| `device.control` | 设备控制（读写设备点位） |
-| `devices.add` | 添加设备 |
-| `devices.delete` | 删除设备 |
-| `devices.report` | 设备数据上报 |
-| `products.report` | 产品信息上报 |
-| `product.import` | 导入产品模型 |
-| `node.configChanged` | 配置变更通知 |
-| `node.networkStatus` | 网络状态查询 |
-| `node.command` | 执行自定义命令 |
+| Method | Description |
+|--------|-------------|
+| `device.control` | Device control (read/write device points) |
+| `devices.add` | Add devices |
+| `devices.delete` | Delete devices |
+| `devices.report` | Device data reporting |
+| `products.report` | Product information reporting |
+| `product.import` | Import product model |
+| `node.configChanged` | Configuration change notification |
+| `node.networkStatus` | Network status query |
+| `node.command` | Execute custom command |
 
-## 快速开始
+## Quick Start
 
-### 环境要求
+### Requirements
 
-- Go 1.23+（源码编译）
-- Docker & Docker Compose（容器部署）
+- Go 1.23+ (for source compilation)
+- Docker & Docker Compose (for containerized deployment)
 
-### 方式一：Docker Compose
+### Option 1: Docker Compose
 
-适用于家庭实验室、开发测试环境：
+Suitable for home labs and development/testing environments:
 
 ```bash
-# 克隆项目
+# Clone the repository
 git clone https://github.com/smartboot/verge.git
 cd verge
 
-# 启动服务
+# Start services
 docker-compose up -d
 
-# 查看日志
+# View logs
 docker-compose logs -f verge
 ```
 
-管理界面地址：`http://localhost:18080`
+Management UI: `http://localhost:18080`
 
-### 方式二：二进制部署（生产环境推荐）
+### Option 2: Binary Deployment (Recommended for Production)
 
-**为什么推荐二进制部署？**
+**Why binary deployment?**
 
-- 网关程序稳定后几乎无需更新，一次性部署即可长期运行
-- 直接运行，无容器层开销
-- 更适合工业现场环境
+- Once stable, the gateway rarely needs updates — deploy once, run indefinitely
+- Direct execution without container overhead
+- Better suited for industrial environments
 
-从 [Releases](https://github.com/smartboot/verge/releases) 或 [Gitee Releases](https://gitee.com/smartboot/verge/releases) 下载：
+Download from [Releases](https://github.com/smartboot/verge/releases):
 
 ```bash
-# 解压
+# Extract
 tar -xzf verge-linux-arm64-*.tar.gz
 cd verge
 
-# 配置云端地址
+# Configure cloud endpoint
 export ENV_VERGE_BASE_URL=http://your-server:8080
 
-# 启动
+# Start
 ./start.sh
 ```
 
-### 方式三：源码运行
+### Option 3: Run from Source
 
 ```bash
 git clone https://github.com/smartboot/verge.git
@@ -169,39 +171,39 @@ go mod tidy
 go run cmd/main.go
 ```
 
-## 配置
+## Configuration
 
-### 环境变量
+### Environment Variables
 
-| 变量 | 说明 | 必填 |
-|------|------|------|
-| `ENV_VERGE_BASE_URL` | 云端管理服务地址 | 是 |
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `ENV_VERGE_BASE_URL` | Cloud management service URL | Yes |
 
-### 目录结构
+### Directory Structure
 
 ```
 verge/
-├── cmd/main.go              # 应用入口
+├── cmd/main.go              # Application entry
 ├── pkg/
-│   ├── sse/                 # SSE 连接管理
-│   ├── rpc/                 # JSON-RPC 处理器
-│   └── reporter/            # 数据上报模块
+│   ├── sse/                 # SSE connection management
+│   ├── rpc/                 # JSON-RPC handlers
+│   └── reporter/            # Data reporting module
 ├── res/
-│   ├── driver/              # 驱动配置（设备模型、连接配置）
+│   ├── driver/              # Driver configs (device models, connections)
 │   └── library/
-│       ├── driver/          # Lua 驱动脚本
-│       ├── model/           # 产品模型定义
-│       └── protocol/        # 协议解析脚本
-├── platform/                # 各平台启动脚本
+│       ├── driver/          # Lua driver scripts
+│       ├── model/           # Product model definitions
+│       └── protocol/        # Protocol parsing scripts
+├── platform/                # Platform-specific startup scripts
 ├── Dockerfile
 └── docker-compose.yml
 ```
 
-## 扩展开发
+## Extension Development
 
-### 添加 RPC 方法
+### Add RPC Methods
 
-在 [`pkg/rpc/handlers.go`](pkg/rpc/handlers.go) 中注册：
+Register in [`pkg/rpc/handlers.go`](pkg/rpc/handlers.go):
 
 ```go
 var Handlers = map[string]func(Context, interface{}) error{
@@ -209,15 +211,15 @@ var Handlers = map[string]func(Context, interface{}) error{
 }
 ```
 
-### 自定义设备驱动
+### Custom Device Drivers
 
-在 `res/library/driver/` 添加 Lua 脚本，参考 [driver-box 文档](https://github.com/ibuilding-x/driver-box)。
+Add Lua scripts in `res/library/driver/`. Refer to [driver-box documentation](https://github.com/ibuilding-x/driver-box).
 
-## 相关项目
+## Related Projects
 
-- [driver-box](https://github.com/ibuilding-x/driver-box) - 设备接入框架
-- [verge-ui](https://github.com/smartboot/verge-ui) - Web 管理界面
+- [driver-box](https://github.com/ibuilding-x/driver-box) - Device access framework
+- [verge-ui](https://github.com/smartboot/verge-ui) - Web management interface
 
-## 许可证
+## License
 
 [Apache License 2.0](LICENSE)
