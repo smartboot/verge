@@ -102,6 +102,4 @@
   <text x="590" y="425" text-anchor="middle" font-family="Arial, sans-serif" font-size="14">☀️ 光伏</text>
   <text x="700" y="425" text-anchor="middle" font-family="Arial, sans-serif" font-size="14">🚪 门禁</text>
   
-  <!-- 应用层说明（右下角） -->
-  <text x="770" y="490" text-anchor="end" font-family="Arial, sans-serif" font-size="9" fill="#94a3b8">应用层（verge-ui）为商业化产品，用户可基于接口定制</text>
 </svg>
