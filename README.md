@@ -183,11 +183,6 @@ var Handlers = map[string]func(Context, interface{}) error{
 
 Add Lua scripts in `res/library/driver/`. Refer to [driver-box documentation](https://github.com/ibuilding-x/driver-box).
 
-## Related Projects
-
-- [driver-box](https://github.com/ibuilding-x/driver-box) - Device access framework
-- [verge-ui](https://github.com/smartboot/verge-ui) - Web management interface
-
 ## License
 
 [Apache License 2.0](LICENSE)

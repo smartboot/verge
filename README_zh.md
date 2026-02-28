@@ -183,10 +183,6 @@ var Handlers = map[string]func(Context, interface{}) error{
 
 在 `res/library/driver/` 添加 Lua 脚本，参考 [driver-box 文档](https://gitee.com/ibuilding-x/driver-box)。
 
-## 相关项目
-
-- [driver-box](https://gitee.com/ibuilding-x/driver-box) - 设备接入框架
-- [verge-ui](https://gitee.com/smartboot/verge-ui) - Web 管理界面
 
 ## 许可证
 
